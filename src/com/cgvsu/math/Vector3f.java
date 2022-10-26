@@ -47,4 +47,15 @@ public class Vector3f {
     public static Vector3f divide(float num, Vector3f vector){
         return new Vector3f(vector.getX() / num, vector.getY() / num, vector.getZ() / num);
     }
+
+    public static Vector3f calculateCrossProduct(Vector3f vector1,Vector3f vector2){
+        float x = vector1.getY()* vector2.getZ() - vector1.getZ()* vector2.getY();
+        float y = vector1.getZ() * vector2.getX() - vector1.getX() * vector1.getZ();
+        float z = vector1.getX() * vector2.getY() - vector1.getY() * vector2.getX();
+        return new Vector3f(x,y,z);
+    }
+
+    public static Vector3f createVector3fFromTwoPoints(float x1,float y1, float z1,float x2,float y2, float z2){
+        return new Vector3f(x2 - x1,y2-y1,z2-z1);
+    }
 }
