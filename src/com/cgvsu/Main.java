@@ -11,13 +11,13 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        Path fileName = Path.of("123.obj");
+        Path fileName = Path.of("../ObjModels/Faceform/WrapHead.obj");
         String fileContent = Files.readString(fileName);
 
         System.out.println("Loading model ...");
         Model model = ObjReader.read(fileContent);
 
-        Model.calculateNormals(fileContent,model);
+        Model.calculateNormals(model);
 
         System.out.println("Vertices: " + model.vertices.size());
         System.out.println("Texture vertices: " + model.textureVertices.size());
