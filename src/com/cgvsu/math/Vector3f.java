@@ -28,7 +28,7 @@ public class Vector3f {
         return z;
     }
 
-    public static Vector3f multiplicate(float num, Vector3f vector){
+    public static Vector3f multiplication(float num, Vector3f vector){
         return new Vector3f(vector.getX() * num, vector.getY() * num, vector.getZ() * num);
     }
 
