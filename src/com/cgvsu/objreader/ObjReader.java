@@ -157,6 +157,10 @@ public class ObjReader {
 			ArrayList<String> wordsInLine = new ArrayList<>(Arrays.asList(currLine.split("\\s+")));
 			wordsInLine.remove(0);
 
+			if (wordsInLine.isEmpty()) {
+				continue;
+			}
+
 			Vector3f currVertex = parseVertex(wordsInLine, onePolygonVertexIndices.get(i));
 
 			x[i] = currVertex.getX();
