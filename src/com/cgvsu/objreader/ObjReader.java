@@ -62,20 +62,18 @@ public class ObjReader {
 				// тем лучше.
 				case OBJ_VERTEX_TOKEN -> result.vertices.add(parseVertex(wordsInLine, lineInd));
 				case OBJ_TEXTURE_TOKEN -> result.textureVertices.add(parseTextureVertex(wordsInLine, lineInd));
-				//case OBJ_NORMAL_TOKEN -> result.normals.add(parseNormal(wordsInLine, lineInd));
+				case OBJ_NORMAL_TOKEN -> result.normals.add(parseNormal(wordsInLine, lineInd));
 				case OBJ_FACE_TOKEN -> result.polygons.add(parseFace(wordsInLine, lineInd,fileContent));
 				default -> {
 				}
 			}
 		}
+		result.normals.clear();
 
 		for (int i = 0; i < result.polygons.size(); i++) {
 			Polygon currPolygon = result.polygons.get(i);
-			for (int j = 0; j < currPolygon.getNormals().size(); j++) {
-				result.normals.add(currPolygon.getNormals().get(j));
-			}
+			result.normals.addAll(currPolygon.getNormals());
 		}
-
 		return result;
 	}
 
@@ -224,38 +222,38 @@ public class ObjReader {
 		}
 	}
 
-	public static ArrayList<Vector3f> calculateNormals(Polygon polygon,String fileContent) {
-		ArrayList<Vector3f> result = new ArrayList<>();
-		ArrayList<Integer> onePolygonVertexIndices = polygon.getVertexIndices();
-		float[] x = new float[onePolygonVertexIndices.size()];
-		float[] y = new float[onePolygonVertexIndices.size()];
-		float[] z = new float[onePolygonVertexIndices.size()];
-
-		try {
-			for (int i = 0; i < onePolygonVertexIndices.size(); i++) {
-				String[] currLineSplit = getLine(fileContent, onePolygonVertexIndices.get(i)).split("\s++");
-				x[i] = Float.parseFloat(currLineSplit[1]);
-				y[i] = Float.parseFloat(currLineSplit[2]);
-				z[i] = Float.parseFloat(currLineSplit[3]);
-			}
-		} catch (Exception ignore) {
-		}
-		int n = x.length;
-
-		Vector3f currVector = calculateCrossProduct(createVector3fFromTwoPoints(x[0], y[0], z[0], x[1], y[1], z[1]),
-				createVector3fFromTwoPoints(x[0], y[0], z[0], x[n - 1], y[n - 1], z[n - 1]));
-		result.add(currVector);
-
-		currVector = calculateCrossProduct(createVector3fFromTwoPoints(x[n - 1], y[n - 1], z[n - 1], x[0], y[0], z[0]),
-				createVector3fFromTwoPoints(x[n - 1], y[n - 1], z[n - 1], x[n - 2], y[n - 2], z[n - 2]));
-		result.add(currVector);
-
-		for (int i = 1; i < onePolygonVertexIndices.size() - 1; i++) {
-			currVector = calculateCrossProduct(createVector3fFromTwoPoints(x[i], y[i], z[i], x[i + 1], y[i + 1], z[i + 1]),
-					createVector3fFromTwoPoints(x[i], y[i], z[i], x[i - 1], y[i - 1], z[i - 1]));
-
-			result.add(currVector);
-		}
-		return result;
-	}
+//	public static ArrayList<Vector3f> calculateNormals(Polygon polygon,String fileContent) {
+//		ArrayList<Vector3f> result = new ArrayList<>();
+//		ArrayList<Integer> onePolygonVertexIndices = polygon.getVertexIndices();
+//		float[] x = new float[onePolygonVertexIndices.size()];
+//		float[] y = new float[onePolygonVertexIndices.size()];
+//		float[] z = new float[onePolygonVertexIndices.size()];
+//
+//		try {
+//			for (int i = 0; i < onePolygonVertexIndices.size(); i++) {
+//				String[] currLineSplit = getLine(fileContent, onePolygonVertexIndices.get(i)).split("\s++");
+//				x[i] = Float.parseFloat(currLineSplit[1]);
+//				y[i] = Float.parseFloat(currLineSplit[2]);
+//				z[i] = Float.parseFloat(currLineSplit[3]);
+//			}
+//		} catch (Exception ignore) {
+//		}
+//		int n = x.length;
+//
+//		Vector3f currVector = calculateCrossProduct(createVector3fFromTwoPoints(x[0], y[0], z[0], x[1], y[1], z[1]),
+//				createVector3fFromTwoPoints(x[0], y[0], z[0], x[n - 1], y[n - 1], z[n - 1]));
+//		result.add(currVector);
+//
+//		currVector = calculateCrossProduct(createVector3fFromTwoPoints(x[n - 1], y[n - 1], z[n - 1], x[0], y[0], z[0]),
+//				createVector3fFromTwoPoints(x[n - 1], y[n - 1], z[n - 1], x[n - 2], y[n - 2], z[n - 2]));
+//		result.add(currVector);
+//
+//		for (int i = 1; i < onePolygonVertexIndices.size() - 1; i++) {
+//			currVector = calculateCrossProduct(createVector3fFromTwoPoints(x[i], y[i], z[i], x[i + 1], y[i + 1], z[i + 1]),
+//					createVector3fFromTwoPoints(x[i], y[i], z[i], x[i - 1], y[i - 1], z[i - 1]));
+//
+//			result.add(currVector);
+//		}
+//		return result;
+//	}
 }
