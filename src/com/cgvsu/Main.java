@@ -1,13 +1,13 @@
 package com.cgvsu;
 
-import com.cgvsu.math.Vector3f;
+
 import com.cgvsu.model.Model;
 import com.cgvsu.objreader.ObjReader;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Scanner;
+
 
 
 public class Main {

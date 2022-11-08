@@ -40,7 +40,7 @@ public class ObjReader {
 		Scanner scanner = new Scanner(fileContent);
 		while (scanner.hasNextLine()) {
 			final String line = scanner.nextLine();
-			ArrayList<String> wordsInLine = new ArrayList<String>(Arrays.asList(line.split("\\s+")));
+			ArrayList<String> wordsInLine = new ArrayList<>(Arrays.asList(line.split("\\s+")));
 			if (wordsInLine.isEmpty()) {
 				continue;
 			}
@@ -123,9 +123,9 @@ public class ObjReader {
 	}
 
 	protected static Polygon parseFace(final ArrayList<String> wordsInLineWithoutToken, int lineInd, String fileContent) {
-		ArrayList<Integer> onePolygonVertexIndices = new ArrayList<Integer>();
-		ArrayList<Integer> onePolygonTextureVertexIndices = new ArrayList<Integer>();
-		ArrayList<Integer> onePolygonNormalIndices = new ArrayList<Integer>();
+		ArrayList<Integer> onePolygonVertexIndices = new ArrayList<>();
+		ArrayList<Integer> onePolygonTextureVertexIndices = new ArrayList<>();
+		ArrayList<Integer> onePolygonNormalIndices = new ArrayList<>();
 
 
 
@@ -154,7 +154,7 @@ public class ObjReader {
 		for (int i = 0; i < onePolygonVertexIndices.size(); i++) {
 			String currLine = getLine(fileContent,onePolygonVertexIndices.get(i));
 
-			ArrayList<String> wordsInLine = new ArrayList<String>(Arrays.asList(currLine.split("\\s+")));
+			ArrayList<String> wordsInLine = new ArrayList<>(Arrays.asList(currLine.split("\\s+")));
 			wordsInLine.remove(0);
 
 			Vector3f currVertex = parseVertex(wordsInLine, onePolygonVertexIndices.get(i));
@@ -195,9 +195,8 @@ public class ObjReader {
 		try {
 			String[] wordIndices = wordInLine.split("/");
 			switch (wordIndices.length) {
-				case 1 -> {
-					onePolygonVertexIndices.add(Integer.parseInt(wordIndices[0]) - 1);
-				}
+				case 1 -> onePolygonVertexIndices.add(Integer.parseInt(wordIndices[0]) - 1);
+
 				case 2 -> {
 					onePolygonVertexIndices.add(Integer.parseInt(wordIndices[0]) - 1);
 					onePolygonTextureVertexIndices.add(Integer.parseInt(wordIndices[1]) - 1);
@@ -209,9 +208,8 @@ public class ObjReader {
 						onePolygonTextureVertexIndices.add(Integer.parseInt(wordIndices[1]) - 1);
 					}
 				}
-				default -> {
-					throw new ObjReaderException("Invalid element size.", lineInd);
-				}
+				default -> throw new ObjReaderException("Invalid element size.", lineInd);
+
 			}
 
 		} catch (NumberFormatException e) {
@@ -221,39 +219,4 @@ public class ObjReader {
 			throw new ObjReaderException("Too few arguments.", lineInd);
 		}
 	}
-
-//	public static ArrayList<Vector3f> calculateNormals(Polygon polygon,String fileContent) {
-//		ArrayList<Vector3f> result = new ArrayList<>();
-//		ArrayList<Integer> onePolygonVertexIndices = polygon.getVertexIndices();
-//		float[] x = new float[onePolygonVertexIndices.size()];
-//		float[] y = new float[onePolygonVertexIndices.size()];
-//		float[] z = new float[onePolygonVertexIndices.size()];
-//
-//		try {
-//			for (int i = 0; i < onePolygonVertexIndices.size(); i++) {
-//				String[] currLineSplit = getLine(fileContent, onePolygonVertexIndices.get(i)).split("\s++");
-//				x[i] = Float.parseFloat(currLineSplit[1]);
-//				y[i] = Float.parseFloat(currLineSplit[2]);
-//				z[i] = Float.parseFloat(currLineSplit[3]);
-//			}
-//		} catch (Exception ignore) {
-//		}
-//		int n = x.length;
-//
-//		Vector3f currVector = calculateCrossProduct(createVector3fFromTwoPoints(x[0], y[0], z[0], x[1], y[1], z[1]),
-//				createVector3fFromTwoPoints(x[0], y[0], z[0], x[n - 1], y[n - 1], z[n - 1]));
-//		result.add(currVector);
-//
-//		currVector = calculateCrossProduct(createVector3fFromTwoPoints(x[n - 1], y[n - 1], z[n - 1], x[0], y[0], z[0]),
-//				createVector3fFromTwoPoints(x[n - 1], y[n - 1], z[n - 1], x[n - 2], y[n - 2], z[n - 2]));
-//		result.add(currVector);
-//
-//		for (int i = 1; i < onePolygonVertexIndices.size() - 1; i++) {
-//			currVector = calculateCrossProduct(createVector3fFromTwoPoints(x[i], y[i], z[i], x[i + 1], y[i + 1], z[i + 1]),
-//					createVector3fFromTwoPoints(x[i], y[i], z[i], x[i - 1], y[i - 1], z[i - 1]));
-//
-//			result.add(currVector);
-//		}
-//		return result;
-//	}
 }
