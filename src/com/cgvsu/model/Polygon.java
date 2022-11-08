@@ -8,8 +8,11 @@ public class Polygon {
 
     private ArrayList<Integer> vertexIndices;
     private ArrayList<Integer> textureVertexIndices;
-    private ArrayList<Integer> normalIndices;
     private ArrayList<Vector3f> normals;
+
+    public ArrayList<Vector3f> getNormals() {
+        return normals;
+    }
 
     public void setNormals(ArrayList<Vector3f> normals) {
         this.normals = normals;
@@ -18,7 +21,6 @@ public class Polygon {
     public Polygon() {
         vertexIndices = new ArrayList<Integer>();
         textureVertexIndices = new ArrayList<Integer>();
-        normalIndices = new ArrayList<Integer>();
         normals = new ArrayList<Vector3f>();
     }
 
@@ -32,10 +34,6 @@ public class Polygon {
         this.textureVertexIndices = textureVertexIndices;
     }
 
-    public void setNormalIndices(ArrayList<Integer> normalIndices) {
-        assert normalIndices.size() >= 3;
-        this.normalIndices = normalIndices;
-    }
 
     public ArrayList<Integer> getVertexIndices() {
         return vertexIndices;
@@ -43,10 +41,6 @@ public class Polygon {
 
     public ArrayList<Integer> getTextureVertexIndices() {
         return textureVertexIndices;
-    }
-
-    public ArrayList<Integer> getNormalIndices() {
-        return normalIndices;
     }
 
     public void addNormal(Vector3f normal){
