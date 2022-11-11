@@ -68,17 +68,11 @@ public class ObjReader {
 				}
 			}
 		}
-		result.normals.clear();
-
-		for (int i = 0; i < result.polygons.size(); i++) {
-			Polygon currPolygon = result.polygons.get(i);
-			result.normals.addAll(currPolygon.getNormals());
-		}
 		return result;
 	}
 
 	// Всем методам кроме основного я поставил модификатор доступа protected, чтобы обращаться к ним в тестах
-	protected static Vector3f parseVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+	public static Vector3f parseVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
 		try {
 			return new Vector3f(
 					Float.parseFloat(wordsInLineWithoutToken.get(0)),
@@ -123,68 +117,19 @@ public class ObjReader {
 	}
 
 	protected static Polygon parseFace(final ArrayList<String> wordsInLineWithoutToken, int lineInd, String fileContent) {
-		ArrayList<Integer> onePolygonVertexIndices = new ArrayList<>();
-		ArrayList<Integer> onePolygonTextureVertexIndices = new ArrayList<>();
-		ArrayList<Integer> onePolygonNormalIndices = new ArrayList<>();
-
-
+		ArrayList<Integer> onePolygonVertexIndices = new ArrayList<Integer>();
+		ArrayList<Integer> onePolygonTextureVertexIndices = new ArrayList<Integer>();
+		ArrayList<Integer> onePolygonNormalIndices = new ArrayList<Integer>();
 
 		for (String s : wordsInLineWithoutToken) {
 			parseFaceWord(s, onePolygonVertexIndices, onePolygonTextureVertexIndices, onePolygonNormalIndices, lineInd);
 		}
-		ArrayList<Vector3f> onePolygonNormals = recalculateNormals(onePolygonVertexIndices,fileContent);
 
 		Polygon result = new Polygon();
 		result.setVertexIndices(onePolygonVertexIndices);
 		result.setTextureVertexIndices(onePolygonTextureVertexIndices);
-		result.setNormals(onePolygonNormals);
+		result.setNormalIndices(onePolygonNormalIndices);
 		return result;
-	}
-
-	protected static ArrayList<Vector3f> recalculateNormals(
-			ArrayList<Integer> onePolygonVertexIndices,
-			String fileContent){
-
-		ArrayList<Vector3f> onePolygonNormals = new ArrayList<>();
-		float[] x = new float[onePolygonVertexIndices.size()];
-		float[] y = new float[onePolygonVertexIndices.size()];
-		float[] z = new float[onePolygonVertexIndices.size()];
-
-
-		for (int i = 0; i < onePolygonVertexIndices.size(); i++) {
-			String currLine = getLine(fileContent,onePolygonVertexIndices.get(i));
-
-			ArrayList<String> wordsInLine = new ArrayList<>(Arrays.asList(currLine.split("\\s+")));
-			wordsInLine.remove(0);
-
-			if (wordsInLine.isEmpty()) {
-				continue;
-			}
-
-			Vector3f currVertex = parseVertex(wordsInLine, onePolygonVertexIndices.get(i));
-
-			x[i] = currVertex.getX();
-			y[i] = currVertex.getY();
-			z[i] = currVertex.getZ();
-		}
-
-		int n = x.length;
-
-		Vector3f currVector = calculateCrossProduct(createVector3fFromTwoPoints(x[0], y[0], z[0], x[1], y[1], z[1]),
-				createVector3fFromTwoPoints(x[0], y[0], z[0], x[n - 1], y[n - 1], z[n - 1]));
-		onePolygonNormals.add(currVector);
-
-		currVector = calculateCrossProduct(createVector3fFromTwoPoints(x[n - 1], y[n - 1], z[n - 1], x[0], y[0], z[0]),
-				createVector3fFromTwoPoints(x[n - 1], y[n - 1], z[n - 1], x[n - 2], y[n - 2], z[n - 2]));
-		onePolygonNormals.add(currVector);
-
-		for (int i = 1; i < onePolygonVertexIndices.size() - 1; i++) {
-			currVector = calculateCrossProduct(createVector3fFromTwoPoints(x[i], y[i], z[i], x[i + 1], y[i + 1], z[i + 1]),
-					createVector3fFromTwoPoints(x[i], y[i], z[i], x[i - 1], y[i - 1], z[i - 1]));
-
-			onePolygonNormals.add(currVector);
-		}
-		return onePolygonNormals;
 	}
 
 	// Обратите внимание, что для чтения полигонов я выделил еще один вспомогательный метод.
