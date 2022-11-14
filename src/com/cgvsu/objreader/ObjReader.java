@@ -23,15 +23,18 @@ public class ObjReader {
 
 	public static String getLine(String str, int lineNum) {
 		int lineInd = 0;
-
+		String line = "";
 		Scanner scanner = new Scanner(str);
-		String line = scanner.nextLine();
-		while (scanner.hasNextLine() && lineInd != lineNum) {
-			line = scanner.nextLine();
-			lineInd++;
+			while (scanner.hasNextLine() && lineInd != lineNum) {
+
+				line = scanner.nextLine();
+				if (line.isEmpty()) {
+					continue;
+				}
+				lineInd++;
+			}
+			return scanner.nextLine();
 		}
-		return line;
-	}
 
 	public static Model read(String fileContent) {
 		Model result = new Model();
@@ -41,7 +44,7 @@ public class ObjReader {
 		while (scanner.hasNextLine()) {
 			final String line = scanner.nextLine();
 			ArrayList<String> wordsInLine = new ArrayList<>(Arrays.asList(line.split("\\s+")));
-			if (wordsInLine.isEmpty()) {
+			if (wordsInLine.get(0).isEmpty()) {
 				continue;
 			}
 
@@ -63,7 +66,7 @@ public class ObjReader {
 				case OBJ_VERTEX_TOKEN -> result.vertices.add(parseVertex(wordsInLine, lineInd));
 				case OBJ_TEXTURE_TOKEN -> result.textureVertices.add(parseTextureVertex(wordsInLine, lineInd));
 				case OBJ_NORMAL_TOKEN -> result.normals.add(parseNormal(wordsInLine, lineInd));
-				case OBJ_FACE_TOKEN -> result.polygons.add(parseFace(wordsInLine, lineInd,fileContent));
+				case OBJ_FACE_TOKEN -> result.polygons.add(parseFace(wordsInLine, lineInd));
 				default -> {
 				}
 			}
@@ -116,7 +119,7 @@ public class ObjReader {
 		}
 	}
 
-	protected static Polygon parseFace(final ArrayList<String> wordsInLineWithoutToken, int lineInd, String fileContent) {
+	protected static Polygon parseFace(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
 		ArrayList<Integer> onePolygonVertexIndices = new ArrayList<Integer>();
 		ArrayList<Integer> onePolygonTextureVertexIndices = new ArrayList<Integer>();
 		ArrayList<Integer> onePolygonNormalIndices = new ArrayList<Integer>();

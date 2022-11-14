@@ -4,6 +4,7 @@ import com.cgvsu.math.Vector3f;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import static com.cgvsu.math.Vector3f.calculateCrossProduct;
 import static com.cgvsu.math.Vector3f.createVector3fFromTwoPoints;
@@ -51,10 +52,17 @@ public class Polygon {
     }
 
     public static Vector3f getVertexCordsFromIndex(String fileContent,int vertexIndex){
-        ArrayList<String> wordsInLine = new ArrayList<>(Arrays.asList(getLine(fileContent, vertexIndex).split("\\s+")));
-        wordsInLine.remove(0);
 
-        return parseVertex(wordsInLine, vertexIndex);
+        String currLine = getLine(fileContent,vertexIndex);
+
+        while (!currLine.startsWith("v")) {
+            currLine = getLine(fileContent, vertexIndex++);
+        }
+
+            ArrayList<String> wordsInLine = new ArrayList<>(Arrays.asList(currLine.split("\\s+")));
+            wordsInLine.remove(0);
+
+            return parseVertex(wordsInLine, vertexIndex);
     }
     public static ArrayList<Vector3f> getVerticesCordsFromIndex(String fileContent, ArrayList<Integer> vertexIndices){
         ArrayList<Vector3f> result = new ArrayList<>();

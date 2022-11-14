@@ -5,23 +5,6 @@ import java.util.ArrayList;
 // Это заготовка для собственной библиотеки для работы с линейной алгеброй
 public class Vector3f {
 
-    private Vector3f startPoint;
-
-    public void setStartPoint(Vector3f startPoint) {
-        this.startPoint = startPoint;
-    }
-
-    public Vector3f getStartPoint() {
-        return startPoint;
-    }
-
-    public Vector3f(Vector3f startPoint, float x, float y, float z) {
-        this.startPoint = startPoint;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
     public Vector3f(float x, float y, float z) {
         this.x = x;
         this.y = y;

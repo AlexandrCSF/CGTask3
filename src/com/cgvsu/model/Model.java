@@ -4,8 +4,7 @@ import com.cgvsu.math.Vector3f;
 
 import java.util.*;
 
-import static com.cgvsu.model.Polygon.calculateNormalForVertexInPolygon;
-import static com.cgvsu.model.Polygon.getVerticesCordsFromIndex;
+import static com.cgvsu.model.Polygon.*;
 
 public class Model {
 
@@ -16,16 +15,19 @@ public class Model {
 
 
     public void recalculateNormals(String fileContent){
+        normals.clear();
         ArrayList<Vector3f> saved = new ArrayList<>();
-        for (int i = 0; i < vertices.size(); i++) {
-            for (int j = 0; j < polygons.size(); j++) {
-                for (int k = 0; k < polygons.get(j).getVertexIndices().size(); k++) {
-                    if(vertices.get(i).equals(getVerticesCordsFromIndex(fileContent,polygons.get(j).getVertexIndices()).get(k))){
-                        saved.add(calculateNormalForVertexInPolygon(fileContent,vertices.get(i),polygons.get(j)));
+        for (Vector3f vertex : vertices) {
+            for (Polygon polygon : polygons) {
+                for (int k = 0; k < polygon.getVertexIndices().size(); k++) {
+                    if (vertex.equals(getVertexCordsFromIndex(fileContent, (polygon.getVertexIndices()).get(k)))) {
+                        saved.add(calculateNormalForVertexInPolygon(fileContent, vertex, polygon));
+                        break;
                     }
                 }
             }
-          normals.add(Vector3f.sum(saved).divide(saved.size()));
+            normals.add(Vector3f.sum(saved).divide(saved.size()));
+            saved.clear();
         }
     }
 }
