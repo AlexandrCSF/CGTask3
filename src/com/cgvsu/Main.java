@@ -17,13 +17,14 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        String fileNameStr = "123.obj";
+        String fileNameStr = "../ObjModels/Faceform/WrapHead.obj";
         Path fileName = Path.of(fileNameStr);
 
         String fileContent = Files.readString(fileName);
-        fileContent = adjust(fileContent);
 
         System.out.println("Loading model ...");
+        fileContent = adjust(fileContent);
+
         Model model = ObjReader.read(fileContent);
         model.recalculateNormals(fileContent);
 
