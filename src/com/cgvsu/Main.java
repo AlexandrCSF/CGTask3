@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Scanner;
 
 
@@ -20,14 +21,11 @@ public class Main {
         Path fileName = Path.of(fileNameStr);
 
         String fileContent = Files.readString(fileName);
-
-        String adjusted = fileContent.replace(fileContent.substring(getIndex(fileContent,'#'),getIndex(fileContent, '\n')),"");
-         adjusted = adjusted.replaceAll("(?m)^[ \t]*\r?\n", "");
-
+        fileContent = adjust(fileContent);
 
         System.out.println("Loading model ...");
-        Model model = ObjReader.read(adjusted);
-        model.recalculateNormals(adjusted);
+        Model model = ObjReader.read(fileContent);
+        model.recalculateNormals(fileContent);
 
         System.out.println("Vertices: " + model.vertices.size());
         System.out.println("Texture vertices: " + model.textureVertices.size());
@@ -35,12 +33,31 @@ public class Main {
         System.out.println("Polygons: " + model.polygons.size());
     }
 
-    public static int getIndex(String fileContent, char character){
+    public static HashMap<Integer,Integer> getIndex(String fileContent, char character){
+        HashMap<Integer,Integer> result = new HashMap<>();
         for (int i = 0; i < fileContent.toCharArray().length; i++) {
             if(character == fileContent.charAt(i)){
-                return i;
+                result.put(i,0);
+                for (int j = i; j < fileContent.toCharArray().length; j++) {
+                    if(fileContent.toCharArray()[j] == '\n'){
+                        result.put(i,j);
+                        break;
+                    }
+                }
             }
         }
-        return -1;
+        return result;
+    }
+
+    public static String adjust(String fileContent){
+        int size = getIndex(fileContent,'#').size();
+        String adjusted = fileContent;
+        for (int i = 0; i < size; i++) {
+
+            int currToken = getIndex(fileContent,'#').get((Integer) getIndex(fileContent,'#').keySet().toArray()[i]);
+
+            adjusted = adjusted.replace(fileContent.substring((Integer) getIndex(fileContent,'#').keySet().toArray()[i],currToken),"");
+        }
+        return adjusted.replaceAll("(?m)^[ \t]*\r?\n", "");
     }
 }
