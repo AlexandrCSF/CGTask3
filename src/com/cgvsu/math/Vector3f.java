@@ -13,7 +13,7 @@ public class Vector3f {
 
     public boolean equals(Vector3f other) {
         // todo: желательно, чтобы это была глобальная константа
-        final float eps = 1e-7f;
+        final float eps = 1e-4f;
         return Math.abs(x - other.x) < eps && Math.abs(y - other.y) < eps && Math.abs(z - other.z) < eps;
     }
 
@@ -31,8 +31,8 @@ public class Vector3f {
         return z;
     }
 
-    public static Vector3f multiplication(float num, Vector3f vector){
-        return new Vector3f(vector.getX() * num, vector.getY() * num, vector.getZ() * num);
+    public Vector3f multiplication(float num){
+        return new Vector3f(getX() * num, getY() * num, getZ() * num);
     }
 
     public static Vector3f sum(Vector3f ... vectors){
@@ -61,25 +61,24 @@ public class Vector3f {
 
 
     public Vector3f divide(float num){
+        final float eps = 1e-7f;
+        if(num - 0 < eps)
+        throw new ArithmeticException("Division by zero");
         return new Vector3f(x / num, y / num, z / num);
-    }
-
-    public static Vector3f divide(int num, Vector3f vector){
-        return new Vector3f(vector.getX() / num, vector.getY() / num, vector.getZ() / num);
     }
 
     public static Vector3f calculateCrossProduct(Vector3f vector1,Vector3f vector2){
         float x = vector1.getY()* vector2.getZ() - vector1.getZ()* vector2.getY();
-        float y = vector1.getZ() * vector2.getX() - vector1.getX() * vector1.getZ();
+        float y = vector1.getZ() * vector2.getX() - vector1.getX() * vector2.getZ();
         float z = vector1.getX() * vector2.getY() - vector1.getY() * vector2.getX();
         return new Vector3f(x,y,z);
     }
 
-    public static Vector3f createVector3fFromTwoPoints(float x1,float y1, float z1,float x2,float y2, float z2){
+    public static Vector3f fromTwoPoints(float x1, float y1, float z1, float x2, float y2, float z2){
         return new Vector3f(x2 - x1,y2-y1,z2-z1);
     }
 
-    public static boolean equals(Vector3f vector1, Vector3f vector2){
-        return vector1.getX() == vector2.getX() && vector1.getY() == vector2.getY() && vector1.getZ() == vector2.getZ();
+    public static Vector3f fromTwoPoints(Vector3f vertex1, Vector3f vertex2){
+        return new Vector3f(vertex2.getX() - vertex1.getX(), vertex2.getY() - vertex1.getY(), vertex2.getZ()- vertex1.getZ());
     }
 }

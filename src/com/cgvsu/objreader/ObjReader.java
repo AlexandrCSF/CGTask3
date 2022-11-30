@@ -10,10 +10,6 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 
-import static com.cgvsu.math.Vector3f.calculateCrossProduct;
-import static com.cgvsu.math.Vector3f.createVector3fFromTwoPoints;
-
-
 public class ObjReader {
 
 	private static final String OBJ_VERTEX_TOKEN = "v";
@@ -44,7 +40,7 @@ public class ObjReader {
 		while (scanner.hasNextLine()) {
 			final String line = scanner.nextLine();
 			ArrayList<String> wordsInLine = new ArrayList<>(Arrays.asList(line.split("\\s+")));
-			if (wordsInLine.get(0).isEmpty()) {
+			if (wordsInLine.isEmpty()) {
 				continue;
 			}
 
@@ -130,8 +126,8 @@ public class ObjReader {
 
 		Polygon result = new Polygon();
 		result.setVertexIndices(onePolygonVertexIndices);
-		result.setTextureVertexIndices(onePolygonTextureVertexIndices);
-		result.setNormalIndices(onePolygonNormalIndices);
+		//result.setTextureVertexIndices(onePolygonTextureVertexIndices);
+		//result.setNormalIndices(onePolygonNormalIndices);
 		return result;
 	}
 
