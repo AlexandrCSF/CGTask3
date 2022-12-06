@@ -126,8 +126,8 @@ public class ObjReader {
 
 		Polygon result = new Polygon();
 		result.setVertexIndices(onePolygonVertexIndices);
-		//result.setTextureVertexIndices(onePolygonTextureVertexIndices);
-		//result.setNormalIndices(onePolygonNormalIndices);
+		result.setTextureVertexIndices(onePolygonTextureVertexIndices);
+		result.setNormalIndices(onePolygonNormalIndices);
 		return result;
 	}
 
