@@ -13,7 +13,7 @@ import java.util.Arrays;
 class ModelUtilsTest {
 
     @Test
-    void calculateNormalForVertexInPolygon() throws IOException {
+    void calculateNormalForVertexInPolygon(){
 
         Model model = new Model();
 
@@ -29,15 +29,11 @@ class ModelUtilsTest {
         model.polygons.add(polygon);
 
         polygon = model.polygons.get(0);
-        Vector3f vertex1 = model.vertices.get(0);
-        Vector3f vertex2 = model.vertices.get(polygon.getVertexIndices().size() - 1);
 
-        Vector3f result1 = ModelUtils.calculateNormalForVertexInPolygon(vertex1, polygon, model);
-        Vector3f expectedResult1 = new Vector3f(23.05f, -555.55f, 67.2f);
+        Vector3f result = ModelUtils.calculateNormalForPolygon(polygon, model);
+        Vector3f expectedResult = new Vector3f(23.05f, -555.55f, 67.2f);
 
-        Vector3f result2 = ModelUtils.calculateNormalForVertexInPolygon(vertex2, polygon, model);
-        Vector3f expectedResult2 = new Vector3f(144.8f, -329.52f, -14.49f);
-        Assertions.assertTrue(expectedResult1.equals(result1) && expectedResult2.equals(result2));
+        Assertions.assertTrue(expectedResult.equals(result));
     }
 
 
@@ -79,11 +75,11 @@ class ModelUtilsTest {
         ModelUtils.recalculateNormals(model);
 
         Vector3f expectedResult1 = new Vector3f(1 / 3f, -1 / 3f, 1 / 3f);
-        Vector3f expectedResult2 = new Vector3f(1 / 3f, 1 / 3f, -1 / 3f);
-        Vector3f expectedResult3 = new Vector3f(-1 / 3f, 1 / 3f, 0);
-        Vector3f expectedResult4 = new Vector3f(-1 / 3f, -1 / 3f, 0);
-        Vector3f expectedResult5 = new Vector3f(1 / 3f, -2 / 3f, -1 / 3f);
-        Vector3f expectedResult6 = new Vector3f(1 / 3f, 2 / 3f, 1 / 3f);
+        Vector3f expectedResult2 = new Vector3f(1 / 3f, -1 / 3f, 1 / 3f);
+        Vector3f expectedResult3 = new Vector3f(1 / 3f, 1 / 3f, 2 / 3f);
+        Vector3f expectedResult4 = new Vector3f(1 / 3f, 1 / 3f, 2 / 3f);
+        Vector3f expectedResult5 = new Vector3f(1 / 3f, 0, 1 / 3f);
+        Vector3f expectedResult6 = new Vector3f(1 / 3f, 0, 1 / 3f);
 
         ArrayList<Vector3f> expectedResult = new ArrayList<>(Arrays.asList(expectedResult1, expectedResult2, expectedResult3, expectedResult4, expectedResult5, expectedResult6));
         for (int i = 0; i < model.normals.size(); i++) {

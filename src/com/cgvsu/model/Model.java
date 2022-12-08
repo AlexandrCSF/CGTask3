@@ -5,7 +5,7 @@ import com.cgvsu.math.Vector3f;
 
 import java.util.*;
 
-import static com.cgvsu.math.Vector3f.*;
+
 
 public class Model {
 
